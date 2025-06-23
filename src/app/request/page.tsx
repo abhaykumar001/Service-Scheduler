@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function ServiceRequestPage() {
   const [form, setForm] = useState({
@@ -8,13 +10,19 @@ export default function ServiceRequestPage() {
     phone: "",
     email: "",
     service: "",
-    date: "",
+    date: "", // keep as string for backend
     timeSlot: "",
   });
   const [status, setStatus] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+    setForm({ ...form, date: date ? date.toISOString().split("T")[0] : "" });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,6 +38,7 @@ export default function ServiceRequestPage() {
     if (res.ok) {
       setStatus("success");
       setForm({ name: "", phone: "", email: "", service: "", date: "", timeSlot: "" });
+      setSelectedDate(null);
     } else {
       setStatus("error");
     }
@@ -48,7 +57,16 @@ export default function ServiceRequestPage() {
           <option value="Plumbing">Plumbing</option>
           <option value="Electrical">Electrical</option>
         </select>
-        <input name="date" type="date" required className="w-full p-2 border rounded" value={form.date} onChange={handleChange} />
+        {/* Calendar-based date picker */}
+        <DatePicker
+          selected={selectedDate}
+          onChange={handleDateChange}
+          dateFormat="yyyy-MM-dd"
+          placeholderText="Select a date"
+          className="w-full p-2 border rounded"
+          minDate={new Date()}
+          required
+        />
         <input name="timeSlot" placeholder="Time Slot (e.g., 2–4 PM)" required className="w-full p-2 border rounded" value={form.timeSlot} onChange={handleChange} />
         <button type="submit" className="bg-blue-600 text-white w-full p-2 rounded hover:bg-blue-700">
           Submit
