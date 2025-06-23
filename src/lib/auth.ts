@@ -27,7 +27,18 @@ export const authOptions = {
         const isValid = await compare(credentials.password, user.password);
         if (!isValid) return null;
 
-        return user;
+        return {
+          user: {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            isAdmin: user.isAdmin,
+          },
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          isAdmin: user.isAdmin,
+        };
       },
     }),
   ],
@@ -39,7 +50,8 @@ export const authOptions = {
     async jwt({ token, user }: { token: JWT; user?: User }) {
       // Add isAdmin to the token at login
       if (user) {
-        token.isAdmin = user.isAdmin;
+        token.isAdmin = (user as any).isAdmin;
+        token.username = (user as any).username;
       }
       return token;
     },
@@ -48,6 +60,7 @@ export const authOptions = {
       if (session.user) {
         session.user.id = token.sub ?? "";
         session.user.isAdmin = token.isAdmin as boolean;
+        session.user.username = token.username as string | undefined;
       }
       return session;
     },

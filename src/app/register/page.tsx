@@ -5,6 +5,7 @@ import { useState } from "react";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ export default function RegisterPage() {
     try {
       const res = await fetch("/api/register", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, username }),
         headers: { "Content-Type": "application/json" },
       });
 
@@ -39,6 +40,15 @@ export default function RegisterPage() {
     <div className="max-w-md mx-auto mt-10 p-6 border rounded">
       <h1 className="text-2xl font-bold mb-4">Register</h1>
       <form onSubmit={handleRegister} className="flex flex-col gap-4">
+        <input
+          name="username"
+          placeholder="Username"
+          required
+          className="w-full p-2 border rounded"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+        />
+
         <input
           type="email"
           placeholder="Email"

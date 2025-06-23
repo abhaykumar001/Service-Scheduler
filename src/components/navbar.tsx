@@ -24,6 +24,10 @@ export default function Navbar() {
           </>
         ) : (
           <>
+            {/* Show username */}
+            <span className="text-sm text-gray-700 font-medium">
+              {session.user.username}
+            </span>
             <Link href="/request" className="text-sm text-blue-600 hover:underline">
               Dashboard
             </Link>
