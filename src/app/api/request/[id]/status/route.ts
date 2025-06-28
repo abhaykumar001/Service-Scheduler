@@ -14,7 +14,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   const newStatus = formData.get("status") as string;
 
   try {
-    const updated = await prisma.serviceRequest.update({
+    await prisma.serviceRequest.update({
       where: { id: params.id },
       data: { status: newStatus },
     });

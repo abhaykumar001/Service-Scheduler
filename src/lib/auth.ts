@@ -2,7 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "./prisma";
 import { compare } from "bcryptjs";
-import { Session, User } from "next-auth";
+import type { Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import type { SessionStrategy } from "next-auth";
 
@@ -44,8 +44,8 @@ export const authOptions = {
     async jwt({ token, user }: { token: JWT; user?: User }) {
       // Add isAdmin to the token at login
       if (user) {
-        token.isAdmin = (user as any).isAdmin;
-        token.username = (user as any).username;
+        token.isAdmin = (user as User).isAdmin;
+        token.username = (user as User).username;
       }
       return token;
     },
