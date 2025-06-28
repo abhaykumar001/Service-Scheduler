@@ -1,10 +1,10 @@
-import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "./prisma";
 import { compare } from "bcryptjs";
 import { Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import type { SessionStrategy } from "next-auth";
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -28,12 +28,6 @@ export const authOptions = {
         if (!isValid) return null;
 
         return {
-          user: {
-            id: user.id,
-            email: user.email,
-            username: user.username,
-            isAdmin: user.isAdmin,
-          },
           id: user.id,
           email: user.email,
           username: user.username,
@@ -42,7 +36,7 @@ export const authOptions = {
       },
     }),
   ],
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt" as SessionStrategy },
   pages: {
     signIn: "/login",
   },

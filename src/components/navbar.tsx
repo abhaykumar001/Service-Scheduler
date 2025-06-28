@@ -8,7 +8,7 @@ export default function Navbar() {
   const { data: session } = useSession();
 
   return (
-    <nav className="flex justify-between items-center p-4 border-b bg-white shadow-sm">
+    <nav className="fixed w-full mt-15 flex justify-between items-center p-4 shadow-lg bg-cover bg-center backdrop-blur-md">
       <Link href="/" className="text-xl font-bold text-blue-700 hover:text-blue-900">
         Service Scheduler
       </Link>
@@ -26,7 +26,7 @@ export default function Navbar() {
           <>
             {/* Show username */}
             <span className="text-sm text-gray-700 font-medium">
-              {session.user.username}
+              Welcome {session.user.username} !
             </span>
             <Link href="/request" className="text-sm text-blue-600 hover:underline">
               Dashboard
